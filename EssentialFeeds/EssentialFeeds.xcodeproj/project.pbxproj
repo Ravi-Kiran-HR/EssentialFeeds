@@ -53,7 +53,7 @@
 		1C5F860827BB71F200599544 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1C5F861727BB728000599544 /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
 		1C5F861F27BB737A00599544 /* FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoader.swift; sourceTree = "<group>"; };
-		1C5F862D27BB91A700599544 /* Architecture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Architecture.png; sourceTree = "<group>"; };
+		1C5F862D27BB91A700599544 /* DependencyDiagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DependencyDiagram.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,7 +147,7 @@
 		1C5F862C27BB918E00599544 /* UML */ = {
 			isa = PBXGroup;
 			children = (
-				1C5F862D27BB91A700599544 /* Architecture.png */,
+				1C5F862D27BB91A700599544 /* DependencyDiagram.png */,
 			);
 			path = UML;
 			sourceTree = "<group>";
