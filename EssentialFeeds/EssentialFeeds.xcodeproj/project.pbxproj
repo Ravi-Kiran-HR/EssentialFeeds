@@ -103,8 +103,7 @@
 		1C5F85E327BB71E600599544 /* EssentialFeeds */ = {
 			isa = PBXGroup;
 			children = (
-				1C5F861727BB728000599544 /* FeedItem.swift */,
-				1C5F861F27BB737A00599544 /* FeedLoader.swift */,
+				1C5F862827BB750300599544 /* Feed Feature */,
 				1C5F85E427BB71E600599544 /* AppDelegate.swift */,
 				1C5F85E627BB71E600599544 /* SceneDelegate.swift */,
 				1C5F85E827BB71E600599544 /* ViewController.swift */,
@@ -132,6 +131,15 @@
 				1C5F860827BB71F200599544 /* Info.plist */,
 			);
 			path = EssentialFeedsUITests;
+			sourceTree = "<group>";
+		};
+		1C5F862827BB750300599544 /* Feed Feature */ = {
+			isa = PBXGroup;
+			children = (
+				1C5F861727BB728000599544 /* FeedItem.swift */,
+				1C5F861F27BB737A00599544 /* FeedLoader.swift */,
+			);
+			path = "Feed Feature";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
