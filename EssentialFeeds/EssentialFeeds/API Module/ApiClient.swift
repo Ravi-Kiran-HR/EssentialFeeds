@@ -7,13 +7,14 @@
 
 import Foundation
 
-protocol ApiClient {
-    func load(url:URL, completion: () -> Void)
+protocol HTTPClient {
+    func get(from url:URL)
 }
 
-class HTTPClient: ApiClient {
+class apiClient: HTTPClient {
     var requestedURL: URL?
-    func load(url:URL, completion: () -> Void){
-        
-    }
+    
+    func get(from url: URL) {
+        self.requestedURL = url
+    }   
 }
