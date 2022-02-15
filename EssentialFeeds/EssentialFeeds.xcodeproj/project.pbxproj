@@ -16,6 +16,7 @@
 		1C5F85FC27BB71F200599544 /* EssentialFeedsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5F85FB27BB71F200599544 /* EssentialFeedsTests.swift */; };
 		1C5F860727BB71F200599544 /* EssentialFeedsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5F860627BB71F200599544 /* EssentialFeedsUITests.swift */; };
 		1C5F861827BB728000599544 /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5F861727BB728000599544 /* FeedItem.swift */; };
+		1C5F862027BB737A00599544 /* FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5F861F27BB737A00599544 /* FeedLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		1C5F860627BB71F200599544 /* EssentialFeedsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EssentialFeedsUITests.swift; sourceTree = "<group>"; };
 		1C5F860827BB71F200599544 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1C5F861727BB728000599544 /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
+		1C5F861F27BB737A00599544 /* FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				1C5F861727BB728000599544 /* FeedItem.swift */,
+				1C5F861F27BB737A00599544 /* FeedLoader.swift */,
 				1C5F85E427BB71E600599544 /* AppDelegate.swift */,
 				1C5F85E627BB71E600599544 /* SceneDelegate.swift */,
 				1C5F85E827BB71E600599544 /* ViewController.swift */,
@@ -264,6 +267,7 @@
 				1C5F861827BB728000599544 /* FeedItem.swift in Sources */,
 				1C5F85E927BB71E600599544 /* ViewController.swift in Sources */,
 				1C5F85E527BB71E600599544 /* AppDelegate.swift in Sources */,
+				1C5F862027BB737A00599544 /* FeedLoader.swift in Sources */,
 				1C5F85E727BB71E600599544 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
