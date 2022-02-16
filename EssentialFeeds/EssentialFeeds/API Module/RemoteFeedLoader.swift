@@ -30,13 +30,9 @@ class RemoteFeedLoader {
         self.url = url
     }
     
-    func load() {
+    func load(completion: @escaping (FeedLoaderResponse) -> Void = { _ in}) {
         apiClient.get(from: url) { response in
-//            switch response {
-//            case .success([FeedItem]): break
-//
-//            case .failure(Error): break
-//            }
+            completion(response)
         }
     }
 }

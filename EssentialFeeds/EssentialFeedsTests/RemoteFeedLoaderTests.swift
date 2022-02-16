@@ -18,32 +18,32 @@ class RemoteFeedLoaderTests: XCTestCase {
     }
     
     func test_load_Invoked_with_URL() {
-        let (sut, client) = makeSUT()
+        let (sut, client) = createSUT()
         sut?.load()
         XCTAssertNotNil(client.requestedUrl)
     }
     
     func test_load_Invoked_with_expected_URL() {
-        let (sut, client) = makeSUT()
+        let (sut, client) = createSUT()
         sut?.load()
         XCTAssertEqual(client.requestedUrl, URL(string: "https://www.someOtherUrl.com")!)
     }
     
     func test_load_InvokedTwice_with_expected_2URLs() {
-        let (sut, client) = makeSUT()
+        let (sut, client) = createSUT()
         sut?.load()
         sut?.load()
         XCTAssertEqual(client.invocationCount, 2)
     }
     
     func test_load_Invoked_expecting_error() {
-        let (sut, client) = makeSUT()
+        let (sut, client) = createSUT()
+        client.throwError = .invalidRequest
         sut?.load()
-        XCTAssertEqual(URL(string: "https://www.someOtherUrl.com")!, client.requestedUrl)
     }
     
     // SUTFactory
-    private func makeSUT(_ url1: URL = URL(string: "https://www.someOtherUrl.com")!,
+    private func createSUT(_ url1: URL = URL(string: "https://www.someOtherUrl.com")!,
                          _ apiClient: HTTPClient = HTTPClientMock()) -> (sut: RemoteFeedLoader?, client: HTTPClientMock) {
         let url = URL(string: "https://www.someOtherUrl.com")!
         let client = HTTPClientMock()
@@ -54,11 +54,28 @@ class RemoteFeedLoaderTests: XCTestCase {
 }
 
 class HTTPClientMock :HTTPClient {
+    enum HTTPClientError {
+        case invalidRequest
+        case noResponse
+    }
+    
     var invocationCount = 0
     var requestedUrl: URL?
+    var throwError: HTTPClientError?
+    
     func get(from url: URL, completion: @escaping (FeedLoaderResponse) -> Void) {
         requestedUrl = url
         invocationCount += 1
-        completion(.failure(.invalidRequest))
+        let obj = FeedItem(id: UUID(uuidString: "uuid1")!,
+                           imageURL: URL(string: "https://www.someOtherUrl.com")!)
+        
+        switch throwError {
+        case .invalidRequest:
+            completion(.failure(.invalidRequest))
+        case .noResponse:
+            completion(.failure(.noResponse))
+        default:
+            completion(.success([obj]))
+        }
     }
 }
