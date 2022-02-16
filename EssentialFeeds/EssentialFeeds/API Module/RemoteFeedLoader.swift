@@ -7,49 +7,26 @@
 
 import Foundation
 
-public enum HTTPClientError: Error {
-    case invalidData
-    case connectivity
-}
-
-public enum FeedLoaderResponse {
-    case success([FeedItem])
-    case failure(HTTPClientError)
-}
-
-extension FeedLoaderResponse: Equatable {
-    public static func == (lhs: FeedLoaderResponse, rhs: FeedLoaderResponse) -> Bool {
-        switch (lhs, rhs) {
-        case (.success, .success):
-            return true
-        case (.failure(let a), .failure(let b)):
-            return a == b
-        case (.success, .failure):
-            return false
-        default:
-            return false
-        }
-    }
-    
-    
-}
-
 public protocol HTTPClient {
-    func get(from url:URL,completion: @escaping (FeedLoaderResponse) -> Void)
+    func get(from url:URL,completion: @escaping (Error) -> Void)
 }
 
-class RemoteFeedLoader {
+final public class RemoteFeedLoader {
     let apiClient: HTTPClient
     let url: URL
+    
+    public enum Error: Swift.Error {
+        case connectivity
+    }
     
     init(_ url: URL, _ apiClient: HTTPClient) {
         self.apiClient = apiClient
         self.url = url
     }
     
-    func load(completion: @escaping (FeedLoaderResponse) -> Void = { _ in}) {
-        apiClient.get(from: url) { response in
-            completion(response)
+    func load(completion: @escaping (Error) -> Void = { _ in}) {
+        apiClient.get(from: url) { error in
+            completion(.connectivity)
         }
     }
 }

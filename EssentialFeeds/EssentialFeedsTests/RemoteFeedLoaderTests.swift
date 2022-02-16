@@ -36,20 +36,15 @@ class RemoteFeedLoaderTests: XCTestCase {
         XCTAssertEqual(client.invocationCount, 2)
     }
     
-    func test_load_Invoked_expecting_error_invalidRequest() {
+    func test_load_Invoked_expecting_connectivity_error() {
         let (sut, client) = createSUT()
-        client.thrownError = .invalidData
-        sut?.load(completion: { response in
-            XCTAssertTrue(response == .failure(.invalidData))
+        client.error = NSError(domain: "Test", code: 0)
+        var capturedError: RemoteFeedLoader.Error?
+        
+        sut?.load(completion: { error in
+            capturedError = error
         })
-    }
-    
-    func test_load_Invoked_expecting_error_noResponse() {
-        let (sut, client) = createSUT()
-        client.thrownError = NSError(domain: "Test", code: 0) as? HTTPClientError
-        sut?.load(completion: { response in
-            XCTAssertTrue(response == .failure(.connectivity))
-        })
+        XCTAssertTrue(capturedError == .connectivity)
     }
     
     // SUTFactory
@@ -66,14 +61,21 @@ class RemoteFeedLoaderTests: XCTestCase {
 class HTTPClientMock :HTTPClient {
     var invocationCount = 0
     var requestedUrl: URL?
-    var thrownError: HTTPClientError?
+    var error: Error?
+//    var messages = [(url: URL, completion: (FeedLoaderResponse) -> Void)] ()
     
-    func get(from url: URL, completion: @escaping (FeedLoaderResponse) -> Void) {
+    func get(from url: URL, completion: @escaping (Error) -> Void) {
         requestedUrl = url
         invocationCount += 1
         
-        if thrownError != nil {
-            completion(.failure(.invalidData))
+        if let error = error {
+            completion(error)
         }
+        
+//        messages.append ((url, completion))
     }
+    
+//    func getResponseBlock(with error: HTTPClientError, atIndex: Int = 0) -> (url: URL, completion: (FeedLoaderResponse) -> Void){
+//        return messages[atIndex].completion(error)
+//    }
 }
