@@ -20,28 +20,37 @@ class RemoteFeedLoaderTests: XCTestCase {
     func test_load_Invoked_with_URL() {
         let (sut, client) = createSUT()
         sut?.load()
-        XCTAssertNotNil(client.requestedUrl)
+        XCTAssertNotNil(client.requestedUrls)
     }
     
     func test_load_Invoked_with_expected_URL() {
         let (sut, client) = createSUT()
         sut?.load()
-        XCTAssertEqual(client.requestedUrl, URL(string: "https://www.someOtherUrl.com")!)
+        XCTAssertEqual(client.requestedUrls[0], URL(string: "https://www.someOtherUrl.com")!)
+    }
+    
+    func test_load_InvokedTwice_with_expected_URL_count() {
+        let (sut, client) = createSUT()
+        sut?.load()
+        sut?.load()
+        XCTAssertEqual(client.requestedUrls.count, 2)
     }
     
     func test_load_InvokedTwice_with_expected_2URLs() {
         let (sut, client) = createSUT()
         sut?.load()
         sut?.load()
-        XCTAssertEqual(client.invocationCount, 2)
+        XCTAssertEqual(client.requestedUrls, [URL(string: "https://www.someOtherUrl.com")!,URL(string: "https://www.someOtherUrl.com")!])
     }
     
     func test_load_Invoked_expecting_connectivity_error() {
         let (sut, client) = createSUT()
-        client.error = NSError(domain: "Test", code: 0)
         var capturedError = [RemoteFeedLoader.Error]()
         
-        sut?.load(completion: { capturedError.append($0)})
+        sut?.load(completion: {capturedError.append($0)})
+        
+        let clientError = NSError(domain: "Test", code: 0)
+        client.completions[0](clientError)
         XCTAssertTrue(capturedError == [.connectivity])
     }
     
@@ -57,23 +66,11 @@ class RemoteFeedLoaderTests: XCTestCase {
 }
 
 class HTTPClientMock :HTTPClient {
-    var invocationCount = 0
-    var requestedUrl: URL?
-    var error: Error?
-//    var messages = [(url: URL, completion: (FeedLoaderResponse) -> Void)] ()
+    var requestedUrls =  [URL]()
+    var completions = [(Error) -> Void]()
     
     func get(from url: URL, completion: @escaping (Error) -> Void) {
-        requestedUrl = url
-        invocationCount += 1
-        
-        if let error = error {
-            completion(error)
-        }
-        
-//        messages.append ((url, completion))
+        requestedUrls.append(url)
+        completions.append(completion)
     }
-    
-//    func getResponseBlock(with error: HTTPClientError, atIndex: Int = 0) -> (url: URL, completion: (FeedLoaderResponse) -> Void){
-//        return messages[atIndex].completion(error)
-//    }
 }
