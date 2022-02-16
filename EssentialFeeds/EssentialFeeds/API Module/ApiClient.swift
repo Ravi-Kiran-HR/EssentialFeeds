@@ -7,14 +7,3 @@
 
 import Foundation
 
-protocol HTTPClient {
-    func get(from url:URL)
-}
-
-class apiClient: HTTPClient {
-    var requestedURL: URL?
-    
-    func get(from url: URL) {
-        self.requestedURL = url
-    }   
-}
