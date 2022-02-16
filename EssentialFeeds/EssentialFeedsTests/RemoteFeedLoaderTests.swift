@@ -45,7 +45,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     
     func test_load_Invoked_expecting_connectivity_client_error() {
         let (sut, client) = createSUT()
-        expect(sut, toCompleteWithError: .invalidData) {
+        expect(sut, toCompleteWithError: .connectivity) {
             let clientError = NSError(domain: "Test", code: 0)
             client.complete(with: .failure(clientError))
         }
