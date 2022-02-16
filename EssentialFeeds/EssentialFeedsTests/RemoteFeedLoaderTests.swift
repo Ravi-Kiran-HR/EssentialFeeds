@@ -48,9 +48,9 @@ class RemoteFeedLoaderTests: XCTestCase {
         var capturedError = [RemoteFeedLoader.Error]()
         
         sut?.load(completion: {capturedError.append($0)})
-        
         let clientError = NSError(domain: "Test", code: 0)
-        client.completions[0](clientError)
+        client.complete(with: clientError)
+        
         XCTAssertTrue(capturedError == [.connectivity])
     }
     
@@ -72,5 +72,9 @@ class HTTPClientMock :HTTPClient {
     func get(from url: URL, completion: @escaping (Error) -> Void) {
         requestedUrls.append(url)
         completions.append(completion)
+    }
+    
+    func complete(with error: Error, at index: Int = 0){
+        completions[index](error)
     }
 }
