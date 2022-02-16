@@ -39,12 +39,10 @@ class RemoteFeedLoaderTests: XCTestCase {
     func test_load_Invoked_expecting_connectivity_error() {
         let (sut, client) = createSUT()
         client.error = NSError(domain: "Test", code: 0)
-        var capturedError: RemoteFeedLoader.Error?
+        var capturedError = [RemoteFeedLoader.Error]()
         
-        sut?.load(completion: { error in
-            capturedError = error
-        })
-        XCTAssertTrue(capturedError == .connectivity)
+        sut?.load(completion: { capturedError.append($0)})
+        XCTAssertTrue(capturedError == [.connectivity])
     }
     
     // SUTFactory
