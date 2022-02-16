@@ -43,15 +43,24 @@ class RemoteFeedLoaderTests: XCTestCase {
         XCTAssertEqual(client.requestedUrls, [URL(string: "https://www.someOtherUrl.com")!,URL(string: "https://www.someOtherUrl.com")!])
     }
     
-    func test_load_Invoked_expecting_connectivity_error() {
+    func test_load_Invoked_expecting_connectivity_client_error() {
         let (sut, client) = createSUT()
         var capturedError = [RemoteFeedLoader.Error]()
         
         sut?.load { capturedError.append($0) }
         let clientError = NSError(domain: "Test", code: 0)
-        client.complete(with: clientError)
+        client.complete(with: .failure(clientError))
         
         XCTAssertTrue(capturedError == [.connectivity])
+    }
+    
+    func test_load_Invoked_expecting_non200HTTPResponseStatus() {
+        let (sut, client) = createSUT()
+        var capturedError = [RemoteFeedLoader.Error]()
+        
+        sut?.load { capturedError.append($0) }
+        client.complete(with: 300)
+        XCTAssertTrue(capturedError == [.invalidData])
     }
     
     // SUTFactory
@@ -66,16 +75,21 @@ class RemoteFeedLoaderTests: XCTestCase {
 }
 
 class HTTPClientSpy :HTTPClient {
-    var messages = [(url: URL, completion: (Error) -> Void)]()
+    var messages = [(url: URL, completion: (HTTPClientResult) -> Void)]()
     var requestedUrls: [URL] {
         return messages.map { $0.url }
     }
     
-    func get(from url: URL, completion: @escaping (Error) -> Void) {
+    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
         messages.append((url, completion))
     }
     
-    func complete(with error: Error, at index: Int = 0){
-        messages[index].completion(error)
+    func complete(with response: HTTPClientResult, at index: Int = 0){
+        messages[index].completion(response)
+    }
+    
+    func complete(with statusCode: Int, at index: Int = 0){
+        let httpResponse = HTTPURLResponse(url: requestedUrls[0], statusCode: statusCode, httpVersion: nil, headerFields: nil)!
+        messages[index].completion(.success(httpResponse))
     }
 }
