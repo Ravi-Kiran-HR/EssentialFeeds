@@ -17,6 +17,23 @@ public enum FeedLoaderResponse {
     case failure(HTTPClientError)
 }
 
+extension FeedLoaderResponse: Equatable {
+    public static func == (lhs: FeedLoaderResponse, rhs: FeedLoaderResponse) -> Bool {
+        switch (lhs, rhs) {
+        case (.success, .success):
+            return true
+        case (.failure(let a), .failure(let b)):
+            return a == b
+        case (.success, .failure):
+            return false
+        default:
+            return false
+        }
+    }
+    
+    
+}
+
 public protocol HTTPClient {
     func get(from url:URL,completion: @escaping (FeedLoaderResponse) -> Void)
 }

@@ -36,10 +36,20 @@ class RemoteFeedLoaderTests: XCTestCase {
         XCTAssertEqual(client.invocationCount, 2)
     }
     
-    func test_load_Invoked_expecting_error() {
+    func test_load_Invoked_expecting_error_invalidRequest() {
         let (sut, client) = createSUT()
         client.throwError = .invalidRequest
-        sut?.load()
+        sut?.load(completion: { response in
+          XCTAssertTrue(response == .failure(.invalidRequest))
+        })
+    }
+    
+    func test_load_Invoked_expecting_error_noResponse() {
+        let (sut, client) = createSUT()
+        client.throwError = .noResponse
+        sut?.load(completion: { response in
+            XCTAssertTrue(response == .failure(.noResponse))
+        })
     }
     
     // SUTFactory
@@ -66,7 +76,7 @@ class HTTPClientMock :HTTPClient {
     func get(from url: URL, completion: @escaping (FeedLoaderResponse) -> Void) {
         requestedUrl = url
         invocationCount += 1
-        let obj = FeedItem(id: UUID(uuidString: "uuid1")!,
+        let obj = FeedItem(id: UUID(),
                            imageURL: URL(string: "https://www.someOtherUrl.com")!)
         
         switch throwError {
