@@ -7,9 +7,9 @@
 
 import Foundation
 
-public enum HTTPClientError {
-    case invalidRequest
-    case noResponse
+public enum HTTPClientError: Error {
+    case invalidData
+    case connectivity
 }
 
 public enum FeedLoaderResponse {

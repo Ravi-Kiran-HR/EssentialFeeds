@@ -38,23 +38,23 @@ class RemoteFeedLoaderTests: XCTestCase {
     
     func test_load_Invoked_expecting_error_invalidRequest() {
         let (sut, client) = createSUT()
-        client.throwError = .invalidRequest
+        client.throwError = .invalidData
         sut?.load(completion: { response in
-          XCTAssertTrue(response == .failure(.invalidRequest))
+            XCTAssertTrue(response == .failure(.invalidData))
         })
     }
     
     func test_load_Invoked_expecting_error_noResponse() {
         let (sut, client) = createSUT()
-        client.throwError = .noResponse
+        client.throwError = .connectivity
         sut?.load(completion: { response in
-            XCTAssertTrue(response == .failure(.noResponse))
+            XCTAssertTrue(response == .failure(.connectivity))
         })
     }
     
     // SUTFactory
     private func createSUT(_ url1: URL = URL(string: "https://www.someOtherUrl.com")!,
-                         _ apiClient: HTTPClient = HTTPClientMock()) -> (sut: RemoteFeedLoader?, client: HTTPClientMock) {
+                           _ apiClient: HTTPClient = HTTPClientMock()) -> (sut: RemoteFeedLoader?, client: HTTPClientMock) {
         let url = URL(string: "https://www.someOtherUrl.com")!
         let client = HTTPClientMock()
         let sut = RemoteFeedLoader(url, client)
@@ -64,26 +64,22 @@ class RemoteFeedLoaderTests: XCTestCase {
 }
 
 class HTTPClientMock :HTTPClient {
-    enum HTTPClientError {
-        case invalidRequest
-        case noResponse
-    }
-    
     var invocationCount = 0
     var requestedUrl: URL?
     var throwError: HTTPClientError?
     
     func get(from url: URL, completion: @escaping (FeedLoaderResponse) -> Void) {
+        
         requestedUrl = url
         invocationCount += 1
         let obj = FeedItem(id: UUID(),
                            imageURL: URL(string: "https://www.someOtherUrl.com")!)
         
         switch throwError {
-        case .invalidRequest:
-            completion(.failure(.invalidRequest))
-        case .noResponse:
-            completion(.failure(.noResponse))
+        case .invalidData:
+            completion(.failure(.invalidData))
+        case .connectivity:
+            completion(.failure(.connectivity))
         default:
             completion(.success([obj]))
         }
