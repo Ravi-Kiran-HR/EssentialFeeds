@@ -9,7 +9,7 @@ import Foundation
 
 public enum HTTPClientError {
     case invalidRequest
-    case noresponse
+    case noResponse
 }
 
 public enum FeedLoaderResponse {
