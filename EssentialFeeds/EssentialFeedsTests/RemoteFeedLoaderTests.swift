@@ -20,7 +20,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     func test_load_Invoked_with_URL() {
         let (sut, client) = createSUT()
         sut?.load()
-        XCTAssertNotNil(client.requestedUrls)
+        XCTAssertNotNil(client.messages)
     }
     
     func test_load_Invoked_with_expected_URL() {
@@ -56,25 +56,26 @@ class RemoteFeedLoaderTests: XCTestCase {
     
     // SUTFactory
     private func createSUT(_ url1: URL = URL(string: "https://www.someOtherUrl.com")!,
-                           _ apiClient: HTTPClient = HTTPClientMock()) -> (sut: RemoteFeedLoader?, client: HTTPClientMock) {
+                           _ apiClient: HTTPClient = HTTPClientSpy()) -> (sut: RemoteFeedLoader?, client: HTTPClientSpy) {
         let url = URL(string: "https://www.someOtherUrl.com")!
-        let client = HTTPClientMock()
+        let client = HTTPClientSpy()
         let sut = RemoteFeedLoader(url, client)
         return (sut, client)
     }
     
 }
 
-class HTTPClientMock :HTTPClient {
-    var requestedUrls =  [URL]()
-    var completions = [(Error) -> Void]()
+class HTTPClientSpy :HTTPClient {
+    var messages = [(url: URL, completion: (Error) -> Void)]()
+    var requestedUrls: [URL] {
+        return messages.map { $0.url }
+    }
     
     func get(from url: URL, completion: @escaping (Error) -> Void) {
-        requestedUrls.append(url)
-        completions.append(completion)
+        messages.append((url, completion))
     }
     
     func complete(with error: Error, at index: Int = 0){
-        completions[index](error)
+        messages[index].completion(error)
     }
 }
