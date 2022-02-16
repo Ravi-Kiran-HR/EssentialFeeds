@@ -19,27 +19,27 @@ class RemoteFeedLoaderTests: XCTestCase {
     
     func test_load_Invoked_with_URL() {
         let (sut, client) = createSUT()
-        sut?.load()
+        sut?.load{ _ in}
         XCTAssertNotNil(client.messages)
     }
     
     func test_load_Invoked_with_expected_URL() {
         let (sut, client) = createSUT()
-        sut?.load()
+        sut?.load{ _ in}
         XCTAssertEqual(client.requestedUrls[0], URL(string: "https://www.someOtherUrl.com")!)
     }
     
     func test_load_InvokedTwice_with_expected_URL_count() {
         let (sut, client) = createSUT()
-        sut?.load()
-        sut?.load()
+        sut?.load{ _ in}
+        sut?.load{ _ in}
         XCTAssertEqual(client.requestedUrls.count, 2)
     }
     
     func test_load_InvokedTwice_with_expected_2URLs() {
         let (sut, client) = createSUT()
-        sut?.load()
-        sut?.load()
+        sut?.load{ _ in}
+        sut?.load{ _ in}
         XCTAssertEqual(client.requestedUrls, [URL(string: "https://www.someOtherUrl.com")!,URL(string: "https://www.someOtherUrl.com")!])
     }
     
@@ -47,7 +47,7 @@ class RemoteFeedLoaderTests: XCTestCase {
         let (sut, client) = createSUT()
         var capturedError = [RemoteFeedLoader.Error]()
         
-        sut?.load(completion: {capturedError.append($0)})
+        sut?.load { capturedError.append($0) }
         let clientError = NSError(domain: "Test", code: 0)
         client.complete(with: clientError)
         
