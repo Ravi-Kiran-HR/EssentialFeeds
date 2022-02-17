@@ -59,6 +59,7 @@
 		1C5F863D27BB96C100599544 /* EssentialFeedsTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EssentialFeedsTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		1C5F863E27BB96C100599544 /* RemoteFeedLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoaderTests.swift; sourceTree = "<group>"; };
 		1C5F864327BBC86E00599544 /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
+		1C61B0D027BEAB83007FB1BF /* payloadContract.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = payloadContract.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,10 +163,19 @@
 		1C5F862E27BB958400599544 /* API Module */ = {
 			isa = PBXGroup;
 			children = (
+				1C61B0CF27BEAB66007FB1BF /* PayloadContract */,
 				1C5F862F27BB959F00599544 /* RemoteFeedLoader.swift */,
 				1C5F864327BBC86E00599544 /* ApiClient.swift */,
 			);
 			path = "API Module";
+			sourceTree = "<group>";
+		};
+		1C61B0CF27BEAB66007FB1BF /* PayloadContract */ = {
+			isa = PBXGroup;
+			children = (
+				1C61B0D027BEAB83007FB1BF /* payloadContract.png */,
+			);
+			path = PayloadContract;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

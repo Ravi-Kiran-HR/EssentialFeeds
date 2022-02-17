@@ -75,6 +75,34 @@ class RemoteFeedLoaderTests: XCTestCase {
             client.complete(with: 200, data: emptyListJSON)
         }
     }
+    
+    func test_load_deliversItemsWith200HTTPResponseWithValidJSON() {
+        let (sut, client) = createSUT()
+        let item1 = FeedItem(id: UUID(),
+                             description: nil,
+                             location: nil,
+                             imageURL: URL(string: "www-a-url")!)
+        let item2 = FeedItem(id: UUID(),
+                             description: "a description",
+                             location: "a location",
+                             imageURL: URL(string: "www-another-url")!)
+        
+        let item1JSON = ["id": item1.id.uuidString,
+                         "image": item1.imageURL.absoluteString]
+        
+        let item2JSON = ["id": item2.id.uuidString,
+                         "description": item2.description,
+                         "location": item2.location,
+                         "image": item2.imageURL.absoluteString]
+        
+        let itemsJSON = ["items": [item1JSON, item2JSON]]
+        
+        
+        expect(sut, toCompleteWith: .success([item1, item2])) {
+            let itemsJSONData = try! JSONSerialization.data(withJSONObject: itemsJSON)
+            client.complete(with: 200, data: itemsJSONData)
+        }
+    }
 }
 
 extension RemoteFeedLoaderTests {
@@ -96,6 +124,25 @@ extension RemoteFeedLoaderTests {
         sut.load { capturedResults.append($0) }
         action()
         XCTAssertTrue(capturedResults == [result], file: file, line: line)
+    }
+    
+    private func createItem(id: UUID,
+                            description: String? = nil,
+                            location: String? = nil,
+                            imageURL: URL) -> (FeedItem, [String: String]) {
+        
+        let item = FeedItem(id: id,
+                            description: description,
+                            location: location,
+                            imageURL: imageURL)
+        
+        let itemJSON = ["id": item.id.uuidString,
+                        "description": item.description,
+                        "location": item.location,
+                        "image": item.imageURL.absoluteString].compactMapValues { $0 }
+        
+        
+        return (item, itemJSON)
     }
 }
 
