@@ -70,10 +70,11 @@ class RemoteFeedLoaderTests: XCTestCase {
     
     func test_load_deliversNoItemsWith200HTTPResponseWithEmptyJSON() {
         let (sut, client) = createSUT()
-        expect(sut, toCompleteWithError: .invalidData) {
-            let emptyJSON = Data()
-            client.complete(with: 200, data: emptyJSON)
-        }
+        var capturedResults = [RemoteFeedLoader.Result]()
+        sut.load { capturedResults.append($0) }
+        let emptyListJSON = Data("{\"items\": []}".utf8)
+        client.complete(with: 200, data: emptyListJSON)
+        XCTAssertTrue(capturedResults == [.success([])])
     }
 }
 
@@ -100,7 +101,8 @@ extension RemoteFeedLoaderTests {
 }
 
 class HTTPClientSpy :HTTPClient {
-    var messages = [(url: URL, completion: (HTTPClientResult) -> Void)]()
+    var messages = [(url: URL,
+                     completion: (HTTPClientResult) -> Void)]()
     var requestedUrls: [URL] {
         return messages.map { $0.url }
     }
@@ -109,12 +111,15 @@ class HTTPClientSpy :HTTPClient {
         messages.append((url, completion))
     }
     
-    func complete(with response: HTTPClientResult, at index: Int = 0){
+    func complete(with response: HTTPClientResult,
+                  at index: Int = 0){
         messages[index].completion(response)
     }
     
-    func complete(with statusCode: Int, data: Data = Data(), at index: Int = 0){
+    func complete(with statusCode: Int,
+                  data: Data = Data(),
+                  at index: Int = 0){
         let httpResponse = HTTPURLResponse(url: requestedUrls[0], statusCode: statusCode, httpVersion: nil, headerFields: nil)!
-        messages[index].completion(.success(httpResponse))
+        messages[index].completion(.success(data, httpResponse))
     }
 }
