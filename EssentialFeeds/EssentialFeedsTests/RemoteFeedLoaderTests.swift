@@ -51,7 +51,7 @@ class RemoteFeedLoaderTests: XCTestCase {
         }
     }
     
-    func test_load_Invoked_expecting_non200HTTPResponseStatus() {
+    func test_load_delivers_non200HTTPResponseStatus() {
         let (sut, client) = createSUT()
         [199, 202, 300, 400].enumerated().forEach { index , status in
             expect(sut, toCompleteWithError: .invalidData) {
@@ -60,11 +60,19 @@ class RemoteFeedLoaderTests: XCTestCase {
         }
     }
     
-    func test_load_Invoked_returns200HTTPResponse_withInvalidJSON() {
+    func test_load_delivers_200HTTPResponse_withInvalidJSON() {
         let (sut, client) = createSUT()
         expect(sut, toCompleteWithError: .invalidData) {
             let invalidJSON = Data("Invalid JSON".utf8)
             client.complete(with: 200, data: invalidJSON)
+        }
+    }
+    
+    func test_load_deliversNoItemsWith200HTTPResponseWithEmptyJSON() {
+        let (sut, client) = createSUT()
+        expect(sut, toCompleteWithError: .invalidData) {
+            let emptyJSON = Data()
+            client.complete(with: 200, data: emptyJSON)
         }
     }
 }
@@ -84,10 +92,10 @@ extension RemoteFeedLoaderTests {
                         when action:()->Void,
                         file: StaticString = #filePath,
                         line: UInt = #line) {
-        var capturedError = [RemoteFeedLoader.Error]()
-        sut.load { capturedError.append($0) }
+        var capturedResults = [RemoteFeedLoader.Result]()
+        sut.load { capturedResults.append($0) }
         action()
-        XCTAssertTrue(capturedError == [error], file: file, line: line)
+        XCTAssertTrue(capturedResults == [.failure(error)], file: file, line: line)
     }
 }
 
@@ -107,6 +115,6 @@ class HTTPClientSpy :HTTPClient {
     
     func complete(with statusCode: Int, data: Data = Data(), at index: Int = 0){
         let httpResponse = HTTPURLResponse(url: requestedUrls[0], statusCode: statusCode, httpVersion: nil, headerFields: nil)!
-        messages[index].completion(.success(data, httpResponse))
+        messages[index].completion(.success(httpResponse))
     }
 }
