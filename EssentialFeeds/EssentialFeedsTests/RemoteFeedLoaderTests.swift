@@ -101,10 +101,15 @@ class RemoteFeedLoaderTests: XCTestCase {
 extension RemoteFeedLoaderTests {
     // SUTFactory
     private func createSUT(_ url1: URL = URL(string: "https://www.someOtherUrl.com")!,
-                           _ apiClient: HTTPClient = HTTPClientSpy()) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
+                           _ apiClient: HTTPClient = HTTPClientSpy(),
+                           file: StaticString = #filePath,
+                           line: UInt = #line) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
         let url = URL(string: "https://www.someOtherUrl.com")!
         let client = HTTPClientSpy()
         let sut = RemoteFeedLoader(url, client)
+        addTeardownBlock { [weak sut] in
+            XCTAssertNil(sut, "sut object should have been deallocated, potential memory leak", file: file, line: line)
+        }
         return (sut, client)
     }
     
