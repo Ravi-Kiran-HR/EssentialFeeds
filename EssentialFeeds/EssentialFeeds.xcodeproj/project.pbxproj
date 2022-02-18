@@ -115,12 +115,7 @@
 				1C61B0D427BFCC3B007FB1BF /* UML */,
 				1C5F862E27BB958400599544 /* Feed API */,
 				1C5F862827BB750300599544 /* Feed Feature */,
-				1C5F85E427BB71E600599544 /* AppDelegate.swift */,
-				1C5F85E627BB71E600599544 /* SceneDelegate.swift */,
-				1C5F85E827BB71E600599544 /* ViewController.swift */,
-				1C5F85EA27BB71E600599544 /* Main.storyboard */,
-				1C5F85ED27BB71F200599544 /* Assets.xcassets */,
-				1C5F85EF27BB71F200599544 /* LaunchScreen.storyboard */,
+				1C61B0FB27BFDD68007FB1BF /* DefaultFiles */,
 				1C5F85F227BB71F200599544 /* Info.plist */,
 			);
 			path = EssentialFeeds;
@@ -187,6 +182,19 @@
 				1C5F862C27BB918E00599544 /* UML */,
 			);
 			path = UML;
+			sourceTree = "<group>";
+		};
+		1C61B0FB27BFDD68007FB1BF /* DefaultFiles */ = {
+			isa = PBXGroup;
+			children = (
+				1C5F85E427BB71E600599544 /* AppDelegate.swift */,
+				1C5F85E627BB71E600599544 /* SceneDelegate.swift */,
+				1C5F85E827BB71E600599544 /* ViewController.swift */,
+				1C5F85EA27BB71E600599544 /* Main.storyboard */,
+				1C5F85ED27BB71F200599544 /* Assets.xcassets */,
+				1C5F85EF27BB71F200599544 /* LaunchScreen.storyboard */,
+			);
+			path = DefaultFiles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
