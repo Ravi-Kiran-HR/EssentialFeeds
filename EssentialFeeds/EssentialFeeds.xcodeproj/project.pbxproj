@@ -18,7 +18,7 @@
 		1C5F862027BB737A00599544 /* FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5F861F27BB737A00599544 /* FeedLoader.swift */; };
 		1C5F863027BB959F00599544 /* RemoteFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5F862F27BB959F00599544 /* RemoteFeedLoader.swift */; };
 		1C5F863F27BB96C100599544 /* RemoteFeedLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5F863E27BB96C100599544 /* RemoteFeedLoaderTests.swift */; };
-		1C5F864427BBC86F00599544 /* ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5F864327BBC86E00599544 /* ApiClient.swift */; };
+		1C61B0D927BFD3E7007FB1BF /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C61B0D827BFD3E7007FB1BF /* HTTPClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,8 +58,8 @@
 		1C5F862F27BB959F00599544 /* RemoteFeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoader.swift; sourceTree = "<group>"; };
 		1C5F863D27BB96C100599544 /* EssentialFeedsTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EssentialFeedsTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		1C5F863E27BB96C100599544 /* RemoteFeedLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoaderTests.swift; sourceTree = "<group>"; };
-		1C5F864327BBC86E00599544 /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
 		1C61B0D027BEAB83007FB1BF /* payloadContract.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = payloadContract.png; sourceTree = "<group>"; };
+		1C61B0D827BFD3E7007FB1BF /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,7 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				1C61B0D427BFCC3B007FB1BF /* UML */,
-				1C5F862E27BB958400599544 /* API Module */,
+				1C5F862E27BB958400599544 /* Feed API */,
 				1C5F862827BB750300599544 /* Feed Feature */,
 				1C5F85E427BB71E600599544 /* AppDelegate.swift */,
 				1C5F85E627BB71E600599544 /* SceneDelegate.swift */,
@@ -160,13 +160,13 @@
 			path = UML;
 			sourceTree = "<group>";
 		};
-		1C5F862E27BB958400599544 /* API Module */ = {
+		1C5F862E27BB958400599544 /* Feed API */ = {
 			isa = PBXGroup;
 			children = (
 				1C5F862F27BB959F00599544 /* RemoteFeedLoader.swift */,
-				1C5F864327BBC86E00599544 /* ApiClient.swift */,
+				1C61B0D827BFD3E7007FB1BF /* HTTPClient.swift */,
 			);
-			path = "API Module";
+			path = "Feed API";
 			sourceTree = "<group>";
 		};
 		1C61B0CF27BEAB66007FB1BF /* PayloadContract-JSON */ = {
@@ -317,10 +317,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1C5F864427BBC86F00599544 /* ApiClient.swift in Sources */,
 				1C5F861827BB728000599544 /* FeedItem.swift in Sources */,
 				1C5F85E927BB71E600599544 /* ViewController.swift in Sources */,
 				1C5F85E527BB71E600599544 /* AppDelegate.swift in Sources */,
+				1C61B0D927BFD3E7007FB1BF /* HTTPClient.swift in Sources */,
 				1C5F862027BB737A00599544 /* FeedLoader.swift in Sources */,
 				1C5F863027BB959F00599544 /* RemoteFeedLoader.swift in Sources */,
 				1C5F85E727BB71E600599544 /* SceneDelegate.swift in Sources */,
