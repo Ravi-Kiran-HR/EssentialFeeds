@@ -107,7 +107,7 @@ class RemoteFeedLoaderTests: XCTestCase {
         sut?.load { capturedResults.append($0) }
         sut = nil
         client.complete(with: 200, data: createItemsJSON([item1JSON, item1JSON]))
-        XCTAssertTrue(capturedResults.count == 0)
+        XCTAssertTrue(capturedResults.isEmpty)
     }
 }
 
