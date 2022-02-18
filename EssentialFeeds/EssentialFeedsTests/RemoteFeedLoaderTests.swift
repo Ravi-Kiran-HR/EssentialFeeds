@@ -40,7 +40,8 @@ class RemoteFeedLoaderTests: XCTestCase {
         let (sut, client) = createSUT()
         sut.load{ _ in}
         sut.load{ _ in}
-        XCTAssertEqual(client.requestedUrls, [URL(string: "https://www.someOtherUrl.com")!,URL(string: "https://www.someOtherUrl.com")!])
+        XCTAssertEqual(client.requestedUrls, [URL(string: "https://www.someOtherUrl.com")!,
+                                              URL(string: "https://www.someOtherUrl.com")!])
     }
     
     func test_load_Invoked_expecting_connectivity_client_error() {
@@ -83,6 +84,7 @@ class RemoteFeedLoaderTests: XCTestCase {
         
         let (item1, item1JSON) = createItem(id: UUID(),
                                             imageURL: URL(string: "www-a-url")!)
+        
         let (item2, item2JSON) = createItem(id: UUID(),
                                             description: "a description",
                                             location: "a location",
@@ -91,7 +93,6 @@ class RemoteFeedLoaderTests: XCTestCase {
         let itemsJSONData = createItemsJSON([item1JSON, item2JSON])
         
         expect(sut, toCompleteWith: .success([item1, item2])) {
-            
             client.complete(with: 200, data: itemsJSONData)
         }
     }
