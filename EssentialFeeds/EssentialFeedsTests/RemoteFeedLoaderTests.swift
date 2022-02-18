@@ -101,16 +101,21 @@ class RemoteFeedLoaderTests: XCTestCase {
 extension RemoteFeedLoaderTests {
     // SUTFactory
     private func createSUT(_ url1: URL = URL(string: "https://www.someOtherUrl.com")!,
-                           _ apiClient: HTTPClient = HTTPClientSpy(),
-                           file: StaticString = #filePath,
-                           line: UInt = #line) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
+                           _ apiClient: HTTPClient = HTTPClientSpy()) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
         let url = URL(string: "https://www.someOtherUrl.com")!
         let client = HTTPClientSpy()
         let sut = RemoteFeedLoader(url, client)
-        addTeardownBlock { [weak sut] in
-            XCTAssertNil(sut, "sut object should have been deallocated, potential memory leak", file: file, line: line)
-        }
+        trackForMemoryLeak(client)
+        trackForMemoryLeak(sut)
         return (sut, client)
+    }
+    
+    private func trackForMemoryLeak(_ object: AnyObject,
+                                           file: StaticString = #filePath,
+                                           line: UInt = #line) {
+        addTeardownBlock { [weak object] in
+            XCTAssertNil(object, "sut object should have been deallocated, potential memory leak", file: file, line: line)
+        }
     }
     
     private func expect(_ sut: RemoteFeedLoader,
