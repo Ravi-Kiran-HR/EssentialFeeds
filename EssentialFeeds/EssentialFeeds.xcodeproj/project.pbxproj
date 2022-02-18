@@ -110,8 +110,8 @@
 		1C5F85E327BB71E600599544 /* EssentialFeeds */ = {
 			isa = PBXGroup;
 			children = (
+				1C61B0D427BFCC3B007FB1BF /* UML */,
 				1C5F862E27BB958400599544 /* API Module */,
-				1C5F862C27BB918E00599544 /* UML */,
 				1C5F862827BB750300599544 /* Feed Feature */,
 				1C5F85E427BB71E600599544 /* AppDelegate.swift */,
 				1C5F85E627BB71E600599544 /* SceneDelegate.swift */,
@@ -163,19 +163,27 @@
 		1C5F862E27BB958400599544 /* API Module */ = {
 			isa = PBXGroup;
 			children = (
-				1C61B0CF27BEAB66007FB1BF /* PayloadContract */,
 				1C5F862F27BB959F00599544 /* RemoteFeedLoader.swift */,
 				1C5F864327BBC86E00599544 /* ApiClient.swift */,
 			);
 			path = "API Module";
 			sourceTree = "<group>";
 		};
-		1C61B0CF27BEAB66007FB1BF /* PayloadContract */ = {
+		1C61B0CF27BEAB66007FB1BF /* PayloadContract-JSON */ = {
 			isa = PBXGroup;
 			children = (
 				1C61B0D027BEAB83007FB1BF /* payloadContract.png */,
 			);
-			path = PayloadContract;
+			path = "PayloadContract-JSON";
+			sourceTree = "<group>";
+		};
+		1C61B0D427BFCC3B007FB1BF /* UML */ = {
+			isa = PBXGroup;
+			children = (
+				1C61B0CF27BEAB66007FB1BF /* PayloadContract-JSON */,
+				1C5F862C27BB918E00599544 /* UML */,
+			);
+			path = UML;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
