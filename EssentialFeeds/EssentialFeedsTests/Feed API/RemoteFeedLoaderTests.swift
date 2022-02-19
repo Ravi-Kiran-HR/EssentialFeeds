@@ -46,7 +46,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     
     func test_load_Invoked_expecting_connectivity_client_error() {
         let (sut, client) = createSUT()
-        expect(sut, toCompleteWith: .failure(.connectivity)) {
+        expect(sut, toCompleteWith: .failure(RemoteFeedLoader.Error.connectivity)) {
             let clientError = NSError(domain: "Test", code: 0)
             client.complete(with: .failure(clientError))
         }
@@ -55,7 +55,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     func test_load_delivers_non200HTTPResponseStatus() {
         let (sut, client) = createSUT()
         [199, 202, 300, 400].enumerated().forEach { index , status in
-            expect(sut, toCompleteWith: .failure(.invalidData)){
+            expect(sut, toCompleteWith: .failure(RemoteFeedLoader.Error.invalidData)){
                 client.complete(with: status,
                                 data: createItemsJSON([]),
                                 at: index)
@@ -65,7 +65,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     
     func test_load_delivers_200HTTPResponse_withInvalidJSON() {
         let (sut, client) = createSUT()
-        expect(sut, toCompleteWith: .failure(.invalidData)) {
+        expect(sut, toCompleteWith: .failure(RemoteFeedLoader.Error.invalidData)) {
             let invalidJSON = Data("Invalid JSON".utf8)
             client.complete(with: 200, data: invalidJSON)
         }
@@ -142,7 +142,7 @@ extension RemoteFeedLoaderTests {
             switch(receivedResult, expectedResult){
             case let(.success(receivedItems), .success(expectedItems)):
                 XCTAssertEqual(receivedItems, expectedItems, file: file, line: line)
-            case let(.failure(receivedError), .failure(expectedError)):
+            case let(.failure(receivedError as RemoteFeedLoader.Error), .failure(expectedError as RemoteFeedLoader.Error)):
                 XCTAssertEqual(receivedError, expectedError, file: file, line: line)
             default:
                 XCTFail("expectd\(expectedResult) but received \(receivedResult) instead")
