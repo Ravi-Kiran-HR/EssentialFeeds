@@ -101,7 +101,7 @@ class RemoteFeedLoaderTests: XCTestCase {
         let url = URL(string: "www-a-url")!
         let client = HTTPClientSpy()
         let (_, item1JSON) = createItem(id: UUID(),
-                                            imageURL: URL(string: "www-a-url")!)
+                                        imageURL: URL(string: "www-a-url")!)
         var sut: RemoteFeedLoader? = RemoteFeedLoader(url, client)
         var capturedResults = [RemoteFeedLoader.Result]()
         sut?.load { capturedResults.append($0) }
@@ -124,22 +124,33 @@ extension RemoteFeedLoaderTests {
     }
     
     private func trackForMemoryLeak(_ object: AnyObject,
-                                           file: StaticString = #filePath,
-                                           line: UInt = #line) {
+                                    file: StaticString = #filePath,
+                                    line: UInt = #line) {
         addTeardownBlock { [weak object] in
             XCTAssertNil(object, "sut object should have been deallocated, potential memory leak", file: file, line: line)
         }
     }
     
     private func expect(_ sut: RemoteFeedLoader,
-                        toCompleteWith result: RemoteFeedLoader.Result,
+                        toCompleteWith expectedResult: RemoteFeedLoader.Result,
                         when action:()->Void,
                         file: StaticString = #filePath,
                         line: UInt = #line) {
-        var capturedResults = [RemoteFeedLoader.Result]()
-        sut.load { capturedResults.append($0) }
+        
+        let exp = expectation(description: "RemoteFeedLoader expecatation")
+        sut.load { receivedResult in
+            switch(receivedResult, expectedResult){
+            case let(.success(receivedItems), .success(expectedItems)):
+                XCTAssertEqual(receivedItems, expectedItems, file: file, line: line)
+            case let(.failure(receivedError), .failure(expectedError)):
+                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+            default:
+                XCTFail("expectd\(expectedResult) but received \(receivedResult) instead")
+            }
+            exp.fulfill()
+        }
         action()
-        XCTAssertTrue(capturedResults == [result], file: file, line: line)
+        wait(for: [exp], timeout: 1)
     }
     
     private func createItem(id: UUID,
