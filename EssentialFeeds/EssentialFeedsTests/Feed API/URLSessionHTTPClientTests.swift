@@ -7,29 +7,54 @@
 
 import XCTest
 
+@testable import EssentialFeeds
+
+class URLSessionHTTPClient {
+    private let urlSession: URLSession
+    
+    init(session: URLSession){
+        urlSession = session
+    }
+    
+    func get(from url: URL) {
+        urlSession.dataTask(with: url).resume()
+    }
+}
+
 class URLSessionHTTPClientTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func test_getFromURL_createsDataTaskWithURL()  {
+        let session = URLSessionSpy()
+        let sut = URLSessionHTTPClient(session: session)
+        let url = URL(string: "http://some_url")!
+        sut.get(from: url)
+        XCTAssertEqual(session.requestedUrls, [url])
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func test_getFromURLResume_resumesDataTaskWithURL()  {
+        let dataTask = URLSessionDataTaskSpy()
+        let session = URLSessionSpy(task: dataTask)
+        let sut = URLSessionHTTPClient(session: session)
+        let url = URL(string: "http://some_url")!
+        sut.get(from: url)
+        XCTAssertEqual(dataTask.resumeInvokeCounter, 1)
     }
+}
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+class URLSessionSpy: URLSession {
+    var requestedUrls = [URL]()
+    let dataTask : URLSessionDataTask!
+    init(task: URLSessionDataTask = URLSessionDataTaskSpy()){
+        dataTask = task
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    override func dataTask(with url: URL) -> URLSessionDataTask {
+        requestedUrls.append(url)
+        return dataTask
     }
+}
 
+class URLSessionDataTaskSpy: URLSessionDataTask {
+    var resumeInvokeCounter = 0
+    override func resume() {
+        resumeInvokeCounter += 1
+    }
 }
