@@ -66,12 +66,12 @@ class URLProtocolStub: URLProtocol {
         return stubs[url] == nil
     }
     
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        return request
-    }
-    
     override class func canInit(with task: URLSessionTask) -> Bool {
         return true
+    }
+    
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+        return request
     }
     
     override func startLoading() {
