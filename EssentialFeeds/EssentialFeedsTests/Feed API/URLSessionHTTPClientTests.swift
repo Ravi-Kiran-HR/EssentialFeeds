@@ -63,11 +63,7 @@ class URLProtocolStub: URLProtocol {
     
     override class func canInit(with request: URLRequest) -> Bool {
         guard let url = request.url else { return false }
-        return stubs[url] == nil
-    }
-    
-    override class func canInit(with task: URLSessionTask) -> Bool {
-        return true
+        return stubs[url] != nil
     }
     
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
