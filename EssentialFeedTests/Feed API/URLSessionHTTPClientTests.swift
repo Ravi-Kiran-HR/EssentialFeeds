@@ -27,9 +27,9 @@ class URLSessionHTTPClient {
 
 class URLSessionHTTPClientTests: XCTestCase {
         func test_getFromURL_performsGetRequestWithURL() {
-        let url = URL(string: "http://some_url")!
+        let url = anyURL()
         let stubError = NSError(domain: "InvalidRequest", code: 12, userInfo: nil)
-        URLProtocolStub.stub(url: url, data: nil, response: nil, error: stubError)
+        URLProtocolStub.stub(data: nil, response: nil, error: stubError)
         let exp = expectation(description: "Expectation")
         makeSUT().get(from: url) { _ in }
         URLProtocolStub.observeRequests { request in
@@ -41,9 +41,9 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_getFromURL_returnsErrorWithInvalidRequest() {
-        let url = URL(string: "http://some_url")!
+        let url = anyURL()
         let stubError = NSError(domain: "InvalidRequest", code: 12, userInfo: nil)
-        URLProtocolStub.stub(url: url, data: nil, response: nil, error: stubError)
+        URLProtocolStub.stub(data: nil, response: nil, error: stubError)
         let exp = expectation(description: "Expectation")
         makeSUT().get(from: url) { response in
             switch response {
@@ -61,6 +61,10 @@ class URLSessionHTTPClientTests: XCTestCase {
         let sut = URLSessionHTTPClient()
         trackForMemoryLeak(sut)
         return sut
+    }
+    
+    private func anyURL() -> URL {
+        return URL(string: "http://any_url")!
     }
     
     override func setUp() {
@@ -83,7 +87,7 @@ class URLProtocolStub: URLProtocol {
         let response: URLResponse?
     }
     
-    static func stub(url: URL, data: Data?, response: URLResponse?, error: Error?) {
+    static func stub(data: Data?, response: URLResponse?, error: Error?) {
         stub = Stub(data: data, error: error, response: response)
     }
     
