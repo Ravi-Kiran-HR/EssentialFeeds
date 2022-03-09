@@ -18,26 +18,26 @@ class RemoteFeedLoaderTests: XCTestCase {
     }
     
     func test_load_Invoked_with_URL() {
-        let (sut, client) = createSUT()
+        let (sut, client) = makeSUT()
         sut.load{ _ in}
         XCTAssertNotNil(client.messages)
     }
     
     func test_load_Invoked_with_expected_URL() {
-        let (sut, client) = createSUT()
+        let (sut, client) = makeSUT()
         sut.load{ _ in}
         XCTAssertEqual(client.requestedUrls[0], URL(string: "https://www.someOtherUrl.com")!)
     }
     
     func test_load_InvokedTwice_with_expected_URL_count() {
-        let (sut, client) = createSUT()
+        let (sut, client) = makeSUT()
         sut.load{ _ in}
         sut.load{ _ in}
         XCTAssertEqual(client.requestedUrls.count, 2)
     }
     
     func test_load_InvokedTwice_with_expected_2URLs() {
-        let (sut, client) = createSUT()
+        let (sut, client) = makeSUT()
         sut.load{ _ in}
         sut.load{ _ in}
         XCTAssertEqual(client.requestedUrls, [URL(string: "https://www.someOtherUrl.com")!,
@@ -45,7 +45,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     }
     
     func test_load_Invoked_expecting_connectivity_client_error() {
-        let (sut, client) = createSUT()
+        let (sut, client) = makeSUT()
         expect(sut, toCompleteWith: failure(.connectivity)) {
             let clientError = NSError(domain: "Test", code: 0)
             client.complete(with: .failure(clientError))
@@ -53,7 +53,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     }
     
     func test_load_delivers_non200HTTPResponseStatus() {
-        let (sut, client) = createSUT()
+        let (sut, client) = makeSUT()
         [199, 202, 300, 400].enumerated().forEach { index , status in
             expect(sut, toCompleteWith: failure(.invalidData)){
                 client.complete(with: status,
@@ -64,7 +64,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     }
     
     func test_load_delivers_200HTTPResponse_withInvalidJSON() {
-        let (sut, client) = createSUT()
+        let (sut, client) = makeSUT()
         expect(sut, toCompleteWith: failure(.invalidData)) {
             let invalidJSON = Data("Invalid JSON".utf8)
             client.complete(with: 200, data: invalidJSON)
@@ -72,7 +72,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     }
     
     func test_load_deliversNoItemsWith200HTTPResponseWithEmptyJSON() {
-        let (sut, client) = createSUT()
+        let (sut, client) = makeSUT()
         expect(sut, toCompleteWith: .success([])) {
             let emptyListJSON = createItemsJSON([])
             client.complete(with: 200, data: emptyListJSON)
@@ -80,7 +80,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     }
     
     func test_load_deliversItemsWith200HTTPResponseWithValidJSON() {
-        let (sut, client) = createSUT()
+        let (sut, client) = makeSUT()
         
         let (item1, item1JSON) = createItem(id: UUID(),
                                             imageURL: URL(string: "www-a-url")!)
@@ -113,7 +113,7 @@ class RemoteFeedLoaderTests: XCTestCase {
 
 extension RemoteFeedLoaderTests {
     // SUTFactory
-    private func createSUT(_ url1: URL = URL(string: "https://www.someOtherUrl.com")!,
+    private func makeSUT(_ url1: URL = URL(string: "https://www.someOtherUrl.com")!,
                            _ apiClient: HTTPClient = HTTPClientSpy()) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
         let url = URL(string: "https://www.someOtherUrl.com")!
         let client = HTTPClientSpy()
@@ -121,14 +121,6 @@ extension RemoteFeedLoaderTests {
         trackForMemoryLeak(client)
         trackForMemoryLeak(sut)
         return (sut, client)
-    }
-    
-    private func trackForMemoryLeak(_ object: AnyObject,
-                                    file: StaticString = #filePath,
-                                    line: UInt = #line) {
-        addTeardownBlock { [weak object] in
-            XCTAssertNil(object, "sut object should have been deallocated, potential memory leak", file: file, line: line)
-        }
     }
     
     private func expect(_ sut: RemoteFeedLoader,
