@@ -26,32 +26,26 @@ class URLSessionHTTPClient {
 }
 
 class URLSessionHTTPClientTests: XCTestCase {
-    
-    func test_getFromURL_performsGetRequestWithURL() {
-        URLProtocolStub.startIntercepting()
+        func test_getFromURL_performsGetRequestWithURL() {
         let url = URL(string: "http://some_url")!
         let stubError = NSError(domain: "InvalidRequest", code: 12, userInfo: nil)
         URLProtocolStub.stub(url: url, data: nil, response: nil, error: stubError)
-        let sut = URLSessionHTTPClient()
         let exp = expectation(description: "Expectation")
-        sut.get(from: url) { _ in }
+        makeSUT().get(from: url) { _ in }
         URLProtocolStub.observeRequests { request in
             XCTAssertEqual(request.httpMethod, "GET")
             XCTAssertEqual(request.url, url)
             exp.fulfill()
         }
         wait(for: [exp], timeout: 3)
-        URLProtocolStub.stopIntercepting()
     }
     
     func test_getFromURL_returnsErrorWithInvalidRequest() {
-        URLProtocolStub.startIntercepting()
         let url = URL(string: "http://some_url")!
         let stubError = NSError(domain: "InvalidRequest", code: 12, userInfo: nil)
         URLProtocolStub.stub(url: url, data: nil, response: nil, error: stubError)
-        let sut = URLSessionHTTPClient()
         let exp = expectation(description: "Expectation")
-        sut.get(from: url) { response in
+        makeSUT().get(from: url) { response in
             switch response {
             case let .failure(error as NSError):
                 XCTAssertEqual(stubError.domain, error.domain)
@@ -61,6 +55,19 @@ class URLSessionHTTPClientTests: XCTestCase {
             exp.fulfill()
         }
         wait(for: [exp], timeout: 3)
+    }
+    
+    private func makeSUT() -> URLSessionHTTPClient {
+        return URLSessionHTTPClient()
+    }
+    
+    override func setUp() {
+        super.setUp()
+        URLProtocolStub.startIntercepting()
+    }
+    
+    override func tearDown() {
+        super.tearDown()
         URLProtocolStub.stopIntercepting()
     }
 }
@@ -120,7 +127,6 @@ class URLProtocolStub: URLProtocol {
         requestObserver = nil
     }
 }
-
 
 
 
