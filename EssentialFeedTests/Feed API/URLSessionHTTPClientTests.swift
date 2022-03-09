@@ -49,7 +49,7 @@ class URLSessionHTTPClientTests: XCTestCase {
 }
 
 class URLProtocolStub: URLProtocol {
-    private static var stubs = [URL: Stub]()
+    private static var stub :Stub?
     private struct Stub {
         let data: Data?
         let error: Error?
@@ -57,13 +57,11 @@ class URLProtocolStub: URLProtocol {
     }
     
     static func stub(url: URL, data: Data?, response: URLResponse?, error: Error?) {
-        let stub = Stub(data: data, error: error, response: response)
-        stubs[url] = stub
+        stub = Stub(data: data, error: error, response: response)
     }
     
     override class func canInit(with request: URLRequest) -> Bool {
-        guard let url = request.url else { return false }
-        return stubs[url] != nil
+        return true
     }
     
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
@@ -71,7 +69,7 @@ class URLProtocolStub: URLProtocol {
     }
     
     override func startLoading() {
-        guard let url = request.url, let stub = URLProtocolStub.stubs[url] else { return }
+        guard let stub = URLProtocolStub.stub else { return }
         
         if let data = stub.data {
             client?.urlProtocol(self, didLoad: data)
@@ -95,7 +93,7 @@ class URLProtocolStub: URLProtocol {
     
     static func stopIntercepting() {
         URLProtocol.unregisterClass(URLProtocolStub.self)
-        stubs = [:]
+        stub = nil
     }
 }
 
