@@ -11,6 +11,7 @@ import XCTest
 
 class URLSessionHTTPClient {
     private let urlSession: URLSession
+    private struct UnexpectedValueRepresentation: Error {}
     
     init(session: URLSession = .shared) {
         urlSession = session
@@ -20,13 +21,15 @@ class URLSessionHTTPClient {
         urlSession.dataTask(with: url) { data, response, error in
             if let error = error {
                 completion(.failure(error))
+            } else {
+                completion(.failure(UnexpectedValueRepresentation()))
             }
         }.resume()
     }
 }
 
 class URLSessionHTTPClientTests: XCTestCase {
-        func test_getFromURL_performsGetRequestWithURL() {
+    func test_getFromURL_performsGetRequestWithURL() {
         let url = anyURL()
         let stubError = NSError(domain: "InvalidRequest", code: 12, userInfo: nil)
         URLProtocolStub.stub(data: nil, response: nil, error: stubError)
@@ -51,6 +54,22 @@ class URLSessionHTTPClientTests: XCTestCase {
                 XCTAssertEqual(stubError.domain, error.domain)
             default:
                 XCTFail("Expecting the error \(stubError)")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 3)
+    }
+    
+    func test_getFromURL_returnsErrorWithAllNilValues() {
+        let url = anyURL()
+        URLProtocolStub.stub(data: nil, response: nil, error: nil)
+        let exp = expectation(description: "Expectation")
+        makeSUT().get(from: url) { response in
+            switch response {
+            case .failure:
+                break
+            default:
+                XCTFail("Expecting failure got \(response)")
             }
             exp.fulfill()
         }

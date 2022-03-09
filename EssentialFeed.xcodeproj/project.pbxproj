@@ -45,6 +45,7 @@
 		BD8093DB27D8B55500246C6A /* RemoteFeedLoaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoaderTests.swift; sourceTree = "<group>"; };
 		BD8093DC27D8B55500246C6A /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		BD8093E027D90AC900246C6A /* XCTestCase+MemoryTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryTracker.swift"; sourceTree = "<group>"; };
+		BD8093E327D90EF000246C6A /* HTTP Response Cases.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HTTP Response Cases.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +125,7 @@
 		BD8093CC27D8B54B00246C6A /* UML */ = {
 			isa = PBXGroup;
 			children = (
+				BD8093E227D90E9E00246C6A /* HTTP Response Cases */,
 				BD8093CD27D8B54B00246C6A /* UML */,
 				BD8093D027D8B54B00246C6A /* PayloadContract-JSON */,
 			);
@@ -163,6 +165,14 @@
 				BD8093E027D90AC900246C6A /* XCTestCase+MemoryTracker.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		BD8093E227D90E9E00246C6A /* HTTP Response Cases */ = {
+			isa = PBXGroup;
+			children = (
+				BD8093E327D90EF000246C6A /* HTTP Response Cases.png */,
+			);
+			path = "HTTP Response Cases";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
