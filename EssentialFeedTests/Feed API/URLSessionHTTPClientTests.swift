@@ -45,13 +45,14 @@ class URLSessionHTTPClientTests: XCTestCase {
     
     func test_getFromURL_completesGetRequestWithValidData() {
         let stubData = anyData()
+        let stubResponse = anyHTTPURLResponse()
         URLProtocolStub.stub(data: stubData, response: anyHTTPURLResponse(), error: nil)
         let exp = expectation(description: "Expectation")
         makeSUT().get(from: anyURL()) { response in
             switch response {
-            case let .success(data, response):
-                XCTAssertEqual(stubData, data)
-                XCTAssertEqual(response, HTTPURLResponse())
+            case let .success(receivedData, receivedResponse):
+                XCTAssertEqual(receivedData, stubData)
+                XCTAssertEqual(receivedResponse, stubResponse)
             default:
                 break
             }
@@ -130,7 +131,7 @@ class URLSessionHTTPClientTests: XCTestCase {
     
     private func nonHTTPURLResponse() -> URLResponse {
         return URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 1, textEncodingName: nil)
-
+        
     }
     
     override func setUp() {
