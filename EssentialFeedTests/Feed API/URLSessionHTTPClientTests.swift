@@ -43,6 +43,24 @@ class URLSessionHTTPClientTests: XCTestCase {
         wait(for: [exp], timeout: 3)
     }
     
+    func test_getFromURL_completesGetRequestWithValidData() {
+        let url = anyURL()
+        let dataStub = Data(capacity: 10)
+        URLProtocolStub.stub(data: dataStub, response: nil, error: nil)
+        let exp = expectation(description: "Expectation")
+        makeSUT().get(from: url) { response in
+            switch response {
+            case let .success(data, response):
+                XCTAssertEqual(dataStub, data)
+                XCTAssertEqual(response, HTTPURLResponse())
+            default:
+                break
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 3)
+    }
+    
     func test_getFromURL_returnsErrorWithInvalidRequest() {
         let requestError = NSError(domain: "InvalidRequest", code: 12, userInfo: nil)
         let receivedError = resultErrorFor(data: nil, response: nil, error: requestError) as NSError?
@@ -54,19 +72,15 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_getFromURL_failsForAllInvalidDataRepresentations() {
-        let requestError = NSError(domain: "InvalidRequest", code: 12, userInfo: nil)
-        let data = Data(capacity: 10)
-        let nonHTTPURLResponse = URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 1, textEncodingName: nil)
-        let anyHTTPURLResponse = HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)
-        XCTAssertNotNil(resultErrorFor(data: nil, response: nonHTTPURLResponse, error: nil))
-        XCTAssertNotNil(resultErrorFor(data: nil, response: anyHTTPURLResponse, error: nil))
-        XCTAssertNotNil(resultErrorFor(data: data, response: nil, error: nil))
-        XCTAssertNotNil(resultErrorFor(data: data, response: nil, error: requestError))
-        XCTAssertNotNil(resultErrorFor(data: nil, response: nonHTTPURLResponse, error: requestError))
-        XCTAssertNotNil(resultErrorFor(data: nil, response: anyHTTPURLResponse, error: requestError))
-        XCTAssertNotNil(resultErrorFor(data: data, response: nonHTTPURLResponse, error: requestError))
-        XCTAssertNotNil(resultErrorFor(data: data, response: anyHTTPURLResponse, error: requestError))
-        XCTAssertNotNil(resultErrorFor(data: data, response: nonHTTPURLResponse, error: nil))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: nonHTTPURLResponse(), error: nil))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: anyHTTPURLResponse(), error: nil))
+        XCTAssertNotNil(resultErrorFor(data: anyData(), response: nil, error: nil))
+        XCTAssertNotNil(resultErrorFor(data: anyData(), response: nil, error: anyNSError()))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: nonHTTPURLResponse(), error: anyNSError()))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: anyHTTPURLResponse(), error: anyNSError()))
+        XCTAssertNotNil(resultErrorFor(data: anyData(), response: nonHTTPURLResponse(), error: anyNSError()))
+        XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyHTTPURLResponse(), error: anyNSError()))
+        XCTAssertNotNil(resultErrorFor(data: anyData(), response: nonHTTPURLResponse(), error: nil))
     }
     
     private func resultErrorFor(data: Data?,
@@ -101,6 +115,23 @@ class URLSessionHTTPClientTests: XCTestCase {
     
     private func anyURL() -> URL {
         return URL(string: "http://any_url")!
+    }
+    
+    private func anyData() -> Data {
+        return Data("any_data".utf8)
+    }
+    
+    private func anyNSError() -> NSError {
+        return NSError(domain: "InvalidRequest", code: 12, userInfo: nil)
+    }
+    
+    private func anyHTTPURLResponse() -> HTTPURLResponse {
+        return HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
+    }
+    
+    private func nonHTTPURLResponse() -> URLResponse {
+        return URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 1, textEncodingName: nil)
+
     }
     
     override func setUp() {
