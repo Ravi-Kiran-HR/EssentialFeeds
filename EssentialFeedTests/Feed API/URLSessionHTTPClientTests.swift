@@ -44,14 +44,13 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_getFromURL_completesGetRequestWithValidData() {
-        let url = anyURL()
-        let dataStub = Data(capacity: 10)
-        URLProtocolStub.stub(data: dataStub, response: nil, error: nil)
+        let stubData = anyData()
+        URLProtocolStub.stub(data: stubData, response: anyHTTPURLResponse(), error: nil)
         let exp = expectation(description: "Expectation")
-        makeSUT().get(from: url) { response in
+        makeSUT().get(from: anyURL()) { response in
             switch response {
             case let .success(data, response):
-                XCTAssertEqual(dataStub, data)
+                XCTAssertEqual(stubData, data)
                 XCTAssertEqual(response, HTTPURLResponse())
             default:
                 break
