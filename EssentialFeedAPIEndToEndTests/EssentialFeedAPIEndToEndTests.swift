@@ -11,26 +11,39 @@ import EssentialFeed
 class EssentialFeedAPIEndToEndTests: XCTestCase {
     
     func test_endToEndTestServerAPIFeedLoader_matches_FixedAPIResponse() {
+        let receivedResult = getTestServerAPIFeedLoaderResult()
+        
+        switch receivedResult {
+        case let .success(feedItems)?:
+            XCTAssertEqual(feedItems.count, 8)
+            feedItems.enumerated().forEach { index, feedItem in
+                XCTAssertEqual(feedItem, expectedItem(at: index))
+            }
+        case let .failure(error)?:
+            XCTAssertNil(error)
+            
+        default:
+            XCTFail("Unexpected error")
+        }
+    }
+    
+    private func getTestServerAPIFeedLoaderResult() -> LoadFeedResult? {
         let testServerURL = URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed")!
         let apiClient = URLSessionHTTPClient()
         let remoteFeedLoader = RemoteFeedLoader(testServerURL, apiClient)
+        var receivedResult: LoadFeedResult?
         
         let exp = expectation(description: "Wait for completion")
         remoteFeedLoader.load { result in
-            switch result {
-            case let .success(feedItems):
-                XCTAssertEqual(feedItems.count, 8)
-                feedItems.enumerated().forEach { index, feedItem in
-                    XCTAssertEqual(feedItem, expectedItem(at: index))
-                }
-            case let .failure(error):
-                XCTAssertNil(error)
-            }
+            receivedResult = result
+            
             exp.fulfill()
         }
         wait(for: [exp], timeout: 5)
+        return receivedResult
     }
 }
+
 
 private func expectedItem(at index: Int) -> FeedItem {
     return FeedItem(
