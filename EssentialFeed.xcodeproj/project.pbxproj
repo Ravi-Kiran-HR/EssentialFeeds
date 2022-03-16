@@ -17,7 +17,6 @@
 		BD8093D427D8B54B00246C6A /* RemoteFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8093C827D8B54B00246C6A /* RemoteFeedLoader.swift */; };
 		BD8093D527D8B54B00246C6A /* FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8093CA27D8B54B00246C6A /* FeedLoader.swift */; };
 		BD8093D627D8B54B00246C6A /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8093CB27D8B54B00246C6A /* FeedItem.swift */; };
-		BD8093D727D8B54B00246C6A /* RemoteWithLocalFallbackService_v2.png in Resources */ = {isa = PBXBuildFile; fileRef = BD8093CE27D8B54B00246C6A /* RemoteWithLocalFallbackService_v2.png */; };
 		BD8093D827D8B54B00246C6A /* RemoteWithLocalFallbackService_v1.png in Resources */ = {isa = PBXBuildFile; fileRef = BD8093CF27D8B54B00246C6A /* RemoteWithLocalFallbackService_v1.png */; };
 		BD8093D927D8B54B00246C6A /* PayloadContract.png in Resources */ = {isa = PBXBuildFile; fileRef = BD8093D127D8B54B00246C6A /* PayloadContract.png */; };
 		BD8093DD27D8B55500246C6A /* RemoteFeedLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8093DB27D8B55500246C6A /* RemoteFeedLoaderTests.swift */; };
@@ -47,6 +46,7 @@
 		1C61F11727E1F67900E2F9B4 /* EssentialFeedAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeedAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C61F11927E1F67900E2F9B4 /* EssentialFeedAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EssentialFeedAPIEndToEndTests.swift; sourceTree = "<group>"; };
 		1C61F12127E1FAC300E2F9B4 /* feed-case-study-test-api-feed.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "feed-case-study-test-api-feed.json"; sourceTree = "<group>"; };
+		1C61F12327E2219100E2F9B4 /* RemoteWithLocalFallbackService_v2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RemoteWithLocalFallbackService_v2.png; sourceTree = "<group>"; };
 		BD8093AD27D8B52400246C6A /* EssentialFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EssentialFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD8093B527D8B52500246C6A /* EssentialFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EssentialFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD8093C627D8B54B00246C6A /* FeedItemsMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedItemsMapper.swift; sourceTree = "<group>"; };
@@ -54,7 +54,6 @@
 		BD8093C827D8B54B00246C6A /* RemoteFeedLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoader.swift; sourceTree = "<group>"; };
 		BD8093CA27D8B54B00246C6A /* FeedLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedLoader.swift; sourceTree = "<group>"; };
 		BD8093CB27D8B54B00246C6A /* FeedItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
-		BD8093CE27D8B54B00246C6A /* RemoteWithLocalFallbackService_v2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RemoteWithLocalFallbackService_v2.png; sourceTree = "<group>"; };
 		BD8093CF27D8B54B00246C6A /* RemoteWithLocalFallbackService_v1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RemoteWithLocalFallbackService_v1.png; sourceTree = "<group>"; };
 		BD8093D127D8B54B00246C6A /* PayloadContract.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PayloadContract.png; sourceTree = "<group>"; };
 		BD8093DB27D8B55500246C6A /* RemoteFeedLoaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoaderTests.swift; sourceTree = "<group>"; };
@@ -169,7 +168,7 @@
 		BD8093CD27D8B54B00246C6A /* UML */ = {
 			isa = PBXGroup;
 			children = (
-				BD8093CE27D8B54B00246C6A /* RemoteWithLocalFallbackService_v2.png */,
+				1C61F12327E2219100E2F9B4 /* RemoteWithLocalFallbackService_v2.png */,
 				BD8093CF27D8B54B00246C6A /* RemoteWithLocalFallbackService_v1.png */,
 			);
 			path = UML;
@@ -332,7 +331,6 @@
 			files = (
 				BD8093D827D8B54B00246C6A /* RemoteWithLocalFallbackService_v1.png in Resources */,
 				BD8093D927D8B54B00246C6A /* PayloadContract.png in Resources */,
-				BD8093D727D8B54B00246C6A /* RemoteWithLocalFallbackService_v2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
