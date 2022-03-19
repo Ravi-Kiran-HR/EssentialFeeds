@@ -31,7 +31,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         let exp = expectation(description: "Expectation")
         makeSUT().get(from: anyURL()) { response in
             switch response {
-            case let .success(receivedData, receivedResponse):
+            case let .success((receivedData, receivedResponse)):
                 XCTAssertEqual(receivedData, stubData)
                 XCTAssertEqual(receivedResponse.statusCode, stubResponse.statusCode)
                 XCTAssertEqual(receivedResponse.url, stubResponse.url)
@@ -113,7 +113,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         var receivedValues:  (data: Data, response: HTTPURLResponse)?
         
         switch result {
-        case let .success(data, response):
+        case let .success((data, response)):
             receivedValues = (data, response)
         default:
             XCTFail("Expecting the success but got \(String(describing: response)) instead", file: file, line: line)
@@ -227,11 +227,11 @@ class URLProtocolStub: URLProtocol {
     override func stopLoading() {}
     
     static func startIntercepting() {
-        URLProtocol.registerClass(URLProtocolStub.self)
+        registerClass(self)
     }
     
     static func stopIntercepting() {
-        URLProtocol.unregisterClass(URLProtocolStub.self)
+        unregisterClass(self)
         stub = nil
         requestObserver = nil
     }

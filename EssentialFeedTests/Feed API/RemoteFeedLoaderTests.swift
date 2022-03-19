@@ -178,14 +178,14 @@ class HTTPClientSpy :HTTPClient {
     }
     
     func complete(with response: HTTPClientResult,
-                  at index: Int = 0){
+                  at index: Int = 0) {
         messages[index].completion(response)
     }
     
     func complete(with statusCode: Int,
                   data: Data,
-                  at index: Int = 0){
+                  at index: Int = 0) {
         let httpResponse = HTTPURLResponse(url: requestedUrls[0], statusCode: statusCode, httpVersion: nil, headerFields: nil)!
-        messages[index].completion(.success(data, httpResponse))
+        messages[index].completion(.success((data, httpResponse)))
     }
 }

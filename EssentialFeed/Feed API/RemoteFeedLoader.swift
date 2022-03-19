@@ -23,10 +23,10 @@ final public class RemoteFeedLoader: FeedLoader {
     }
     
     public func load(completion: @escaping (Result) -> Void) {
-        apiClient.get(from: url) {[weak self] response in
+        apiClient.get(from: url) { [weak self] response in
             guard self != nil else { return }
             switch response {
-            case let .success(data, response):
+            case let .success((data, response)):
                 completion(FeedItemsMapper.map(data, response))
             case .failure:
                 completion(.failure(Error.connectivity))
