@@ -13,24 +13,36 @@ class LocalFeedLoader {
     init(store: FeedStore) {
         self.store = store
     }
-    func save(_ item: [FeedItem]) {
-        store.deleteCachedFeed()
+    func save(_ items: [FeedItem]) {
+        store.deleteCachedFeed { [unowned self] error in
+            if error == nil {
+                self.store.insert(items)
+            }
+        }
     }
 }
 
 class FeedStore {
+    typealias DeletionCompletion = (Error?) -> Void
+
     var deleteCachedFeedCallCount = 0
     var insertionCallCount = 0
+    var deletionCompletions = [DeletionCompletion]()
     
-    func deleteCachedFeed() {
+    func deleteCachedFeed(completion: @escaping DeletionCompletion) {
         deleteCachedFeedCallCount += 1
+        deletionCompletions.append(completion)
     }
     
     func completesDeletion(with error: NSError, at index: Int = 0) {
-        
+        deletionCompletions[index](error)
     }
     
     func completesDeletionSuccessfully(at index: Int = 0) {
+        deletionCompletions[index](nil)
+    }
+    
+    func insert(_ items: [FeedItem]) {
         insertionCallCount += 1
     }
 }
