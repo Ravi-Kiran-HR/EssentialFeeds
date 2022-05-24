@@ -47,7 +47,7 @@ class CacheFeedUseCaseTests: XCTestCase {
         return URL(string: "http://any_url")!
     }
     
-    // MARK: -Helpers
+    // MARK: - Helpers
     
     private func makeSUT() -> (LocalFeedLoader, FeedStore) {
         let store = FeedStore()
