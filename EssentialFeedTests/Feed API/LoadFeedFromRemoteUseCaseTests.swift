@@ -8,7 +8,7 @@
 import XCTest
 @testable import EssentialFeed
 
-class RemoteFeedLoaderTests: XCTestCase {
+class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     
     func test_load_Invoked_with_URL() {
         let (sut, client) = makeSUT()
@@ -104,7 +104,7 @@ class RemoteFeedLoaderTests: XCTestCase {
     }
 }
 
-extension RemoteFeedLoaderTests {
+extension LoadFeedFromRemoteUseCaseTests {
     // SUTFactory
     private func makeSUT(_ url1: URL = URL(string: "https://www.someOtherUrl.com")!,
                            _ apiClient: HTTPClient = HTTPClientSpy()) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
