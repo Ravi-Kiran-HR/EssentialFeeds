@@ -20,9 +20,14 @@ class LocalFeedLoader {
 
 class FeedStore {
     var deleteCachedFeedCallCount = 0
+    var insertionCallCount = 0
     
     func deleteCachedFeed() {
         deleteCachedFeedCallCount += 1
+    }
+    
+    func completes(with error: NSError) {
+        
     }
 }
 
@@ -39,13 +44,14 @@ class CacheFeedUseCaseTests: XCTestCase {
         XCTAssertEqual(store.deleteCachedFeedCallCount, 1)
     }
     
-    func uniqueFeedItem() -> FeedItem {
-        FeedItem(id: UUID(), description: nil, location: nil, imageURL: anyURL())
+    func test_save_doestNotRequestInsertionUponDeletionError() {
+        let (sut, store) = makeSUT()
+        store.completes(with: anyNSError())
+        sut.save([uniqueFeedItem(), uniqueFeedItem()])
+        XCTAssertEqual(store.insertionCallCount, 0)
     }
     
-    private func anyURL() -> URL {
-        return URL(string: "http://any_url")!
-    }
+    
     
     // MARK: - Helpers
     
@@ -56,5 +62,17 @@ class CacheFeedUseCaseTests: XCTestCase {
         trackForMemoryLeak(store, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
         return (sut, store)
+    }
+    
+    func uniqueFeedItem() -> FeedItem {
+        FeedItem(id: UUID(), description: nil, location: nil, imageURL: anyURL())
+    }
+    
+    private func anyURL() -> URL {
+        return URL(string: "http://any_url")!
+    }
+    
+    private func anyNSError() -> NSError {
+        return NSError(domain: "InvalidRequest", code: 12, userInfo: nil)
     }
 }
