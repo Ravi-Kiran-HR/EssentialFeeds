@@ -26,7 +26,7 @@ class FeedStore {
         deleteCachedFeedCallCount += 1
     }
     
-    func completes(with error: NSError) {
+    func completesDeletion(with error: NSError) {
         
     }
 }
@@ -46,7 +46,8 @@ class CacheFeedUseCaseTests: XCTestCase {
     
     func test_save_doestNotRequestInsertionUponDeletionError() {
         let (sut, store) = makeSUT()
-        store.completes(with: anyNSError())
+        let deletionError = anyNSError()
+        store.completesDeletion(with: deletionError)
         sut.save([uniqueFeedItem(), uniqueFeedItem()])
         XCTAssertEqual(store.insertionCallCount, 0)
     }
