@@ -107,12 +107,14 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
 extension LoadFeedFromRemoteUseCaseTests {
     // SUTFactory
     private func makeSUT(_ url1: URL = URL(string: "https://www.someOtherUrl.com")!,
-                           _ apiClient: HTTPClient = HTTPClientSpy()) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
+                           _ apiClient: HTTPClient = HTTPClientSpy(),
+                         file: StaticString = #filePath,
+                         line: UInt = #line) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
         let url = URL(string: "https://www.someOtherUrl.com")!
         let client = HTTPClientSpy()
         let sut = RemoteFeedLoader(url, client)
-        trackForMemoryLeak(client)
-        trackForMemoryLeak(sut)
+        trackForMemoryLeak(client, file: file, line: line)
+        trackForMemoryLeak(sut, file: file, line: line)
         return (sut, client)
     }
     
