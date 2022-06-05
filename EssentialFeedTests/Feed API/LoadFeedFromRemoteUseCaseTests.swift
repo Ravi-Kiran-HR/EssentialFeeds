@@ -143,17 +143,17 @@ extension LoadFeedFromRemoteUseCaseTests {
     private func createItem(id: UUID,
                             description: String? = nil,
                             location: String? = nil,
-                            imageURL: URL) -> (FeedItem, [String: String]) {
+                            imageURL: URL) -> (FeedImage, [String: String]) {
         
-        let item = FeedItem(id: id,
+        let item = FeedImage(id: id,
                             description: description,
                             location: location,
-                            imageURL: imageURL)
+                            url: imageURL)
         
         let itemJSON = ["id": item.id.uuidString,
                         "description": item.description,
                         "location": item.location,
-                        "image": item.imageURL.absoluteString].compactMapValues { $0 }
+                        "image": item.url.absoluteString].compactMapValues { $0 }
         
         
         return (item, itemJSON)
