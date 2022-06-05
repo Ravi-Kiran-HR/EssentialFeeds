@@ -96,7 +96,7 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         let (_, item1JSON) = createItem(id: UUID(),
                                         imageURL: URL(string: "www-a-url")!)
         var sut: RemoteFeedLoader? = RemoteFeedLoader(url, client)
-        var capturedResults = [RemoteFeedLoader.Result]()
+        var capturedResults = [LoadFeedResult]()
         sut?.load { capturedResults.append($0) }
         sut = nil
         client.complete(with: 200, data: createItemsJSON([item1JSON, item1JSON]))
@@ -119,7 +119,7 @@ extension LoadFeedFromRemoteUseCaseTests {
     }
     
     private func expect(_ sut: RemoteFeedLoader,
-                        toCompleteWith expectedResult: RemoteFeedLoader.Result,
+                        toCompleteWith expectedResult: LoadFeedResult,
                         when action:()->Void,
                         file: StaticString = #filePath,
                         line: UInt = #line) {
@@ -163,7 +163,7 @@ extension LoadFeedFromRemoteUseCaseTests {
         return  try! JSONSerialization.data(withJSONObject: ["items": JSONObjs])
     }
     
-    private func failure(_ error: RemoteFeedLoader.Error) -> RemoteFeedLoader.Result {
+    private func failure(_ error: RemoteFeedLoader.Error) -> LoadFeedResult {
        return .failure(error)
     }
 }

@@ -10,7 +10,6 @@ import Foundation
 final public class RemoteFeedLoader: FeedLoader {
     let apiClient: HTTPClient
     let url: URL
-    public typealias Result = LoadFeedResult
     
     public init(_ url: URL, _ apiClient: HTTPClient) {
         self.apiClient = apiClient
@@ -22,7 +21,7 @@ final public class RemoteFeedLoader: FeedLoader {
         case invalidData
     }
     
-    public func load(completion: @escaping (Result) -> Void) {
+    public func load(completion: @escaping (LoadFeedResult) -> Void) {
         apiClient.get(from: url) { [weak self] response in
             guard self != nil else { return }
             switch response {
@@ -34,7 +33,7 @@ final public class RemoteFeedLoader: FeedLoader {
         }
     }
     
-    private static func map(_ data: Data, _ response: HTTPURLResponse) -> Result {
+    private static func map(_ data: Data, _ response: HTTPURLResponse) -> LoadFeedResult {
         do {
             let remoteFeedItems = try FeedItemsMapper.map(data, response)
             return .success(remoteFeedItems.toFeedItems())
