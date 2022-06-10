@@ -29,8 +29,14 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         let exp = expectation(description: "wait for exp")
         var receivedError: Error?
         
-        sut.load() { error in
-            receivedError = error
+        sut.load() { result in
+            switch result {
+            case .failure(let error):
+                receivedError = error
+            default:
+                XCTFail("expected failure got \(result) instead")
+            }
+            
             exp.fulfill()
         }
         store.completeRetrival(with: retrievalError)
@@ -38,8 +44,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
                 
         XCTAssertEqual(receivedError as NSError?, retrievalError)
     }
-    
-    
+
     private func makeSUT(currentDate: @escaping () -> Date = Date.init,
                          file: StaticString = #filePath,
                          line: UInt = #line) -> (LocalFeedLoader, FeedStoreSpy) {
