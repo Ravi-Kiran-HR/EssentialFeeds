@@ -40,6 +40,17 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         }
     }
     
+    func test_load_deliversCachedImagesOnLessThanSevenDaysOldCache() {
+        let feed = uniqueImageFeed()
+        let fixedCurrentDate = Date()
+        let lessThan7DaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
+
+        expect(sut, toCompleteWith: .success(feed.models)) {
+            store.completeRetrival(with: feed.local, timestamp: lessThan7DaysOldTimestamp)
+        }
+    }
+    
     private func expect(_ sut: LocalFeedLoader,
                         toCompleteWith expectedResult: LocalFeedLoader.LoadResult,
                         when action: () -> Void, file: StaticString = #filePath,
@@ -82,8 +93,23 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         FeedImage(id: UUID(), description: nil, location: nil, url: anyURL())
     }
     
+    private func uniqueImageFeed() -> (models: [FeedImage], local: [LocalFeedImage]) {
+        let items = [uniqueImage(), uniqueImage()]
+        let localItems = items.map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url) }
+        return (items, localItems)
+    }
+    
     private func anyURL() -> URL {
         return URL(string: "http://any_url")!
     }
+}
 
+private extension Date {
+    func adding(days: Int) -> Date {
+        return Calendar.init(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
+    }
+    
+    func adding(seconds: TimeInterval) -> Date {
+        return self + seconds
+    }
 }
