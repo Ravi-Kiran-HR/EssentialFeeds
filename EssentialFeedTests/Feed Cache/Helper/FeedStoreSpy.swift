@@ -9,10 +9,6 @@ import Foundation
 import EssentialFeed
 
 class FeedStoreSpy: FeedStore {
-    typealias DeletionCompletion = (Error?) -> Void
-    typealias InsertionCompletion = (Error?) -> Void
-    typealias RetrivalCompletion = (Error?) -> Void
-
     var deletionCompletions = [DeletionCompletion]()
     var insertionCompletions = [InsertionCompletion]()
     var retrivalCompletions = [RetrivalCompletion]()
@@ -57,5 +53,9 @@ class FeedStoreSpy: FeedStore {
     
     func completeRetrival(with error: NSError, at index: Int = 0) {
         retrivalCompletions[index](error)
+    }
+    
+    func completeRetrivalWithEmptyCache(at index: Int = 0) {
+        retrivalCompletions[index](nil)
     }
 }

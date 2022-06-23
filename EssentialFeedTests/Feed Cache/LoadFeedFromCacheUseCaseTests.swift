@@ -44,6 +44,29 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
                 
         XCTAssertEqual(receivedError as NSError?, retrievalError)
     }
+    
+    func test_load_deliversNoFeedImagesOnEmptyCache() {
+        let (sut, store) = makeSUT()
+        var retrievedImages: [FeedImage]?
+        let expectedImages: [FeedImage] = []
+        
+        let exp = expectation(description: "wait for exp")
+        
+        sut.load() { result in
+            switch result {
+            case .success(let feeds):
+                retrievedImages = feeds
+            default:
+                XCTFail("expected success got \(result) instead")
+            }
+            
+            exp.fulfill()
+        }
+        store.completeRetrivalWithEmptyCache()
+        wait(for: [exp], timeout: 1)
+                
+        XCTAssertEqual(retrievedImages, expectedImages)
+    }
 
     private func makeSUT(currentDate: @escaping () -> Date = Date.init,
                          file: StaticString = #filePath,
@@ -57,6 +80,14 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     
     private func anyNSError() -> NSError {
         return NSError(domain: "InvalidRequest", code: 12, userInfo: nil)
+    }
+    
+    private func uniqueImage() -> FeedImage {
+        FeedImage(id: UUID(), description: nil, location: nil, url: anyURL())
+    }
+    
+    private func anyURL() -> URL {
+        return URL(string: "http://any_url")!
     }
 
 }
