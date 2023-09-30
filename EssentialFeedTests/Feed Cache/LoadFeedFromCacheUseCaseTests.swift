@@ -93,7 +93,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
-    func test_load_doesNotDeletesCacheOnLessThan7DaysOldCache() {
+    func test_load_hasNoSideEffectsOnLessThan7DaysOldCache() {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
         let lessThan7DaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
@@ -200,7 +200,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     }
 }
 
-private extension Date {
+public extension Date {
     func adding(days: Int) -> Date {
         return Calendar.init(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
     }
