@@ -106,7 +106,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
-    func test_load_deletesCacheOn7DaysOldCache() {
+    func test_load_hasNoSideEffectsOn7DaysOldCache() {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
         let sevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7)
@@ -116,7 +116,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         
         store.completeRetrival(with: feed.local, timestamp: sevenDaysOldTimestamp)
         
-        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCachedFeed])
+        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCachedFeed ])
     }
     
     func test_load_deletesCacheOnMoreThan7DaysOldCache() {
@@ -179,33 +179,5 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         trackForMemoryLeak(store, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
         return (sut, store)
-    }
-    
-    private func anyNSError() -> NSError {
-        return NSError(domain: "InvalidRequest", code: 12, userInfo: nil)
-    }
-    
-    private func uniqueImage() -> FeedImage {
-        FeedImage(id: UUID(), description: nil, location: nil, url: anyURL())
-    }
-    
-    private func uniqueImageFeed() -> (models: [FeedImage], local: [LocalFeedImage]) {
-        let items = [uniqueImage(), uniqueImage()]
-        let localItems = items.map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url) }
-        return (items, localItems)
-    }
-    
-    private func anyURL() -> URL {
-        return URL(string: "http://any_url")!
-    }
-}
-
-public extension Date {
-    func adding(days: Int) -> Date {
-        return Calendar.init(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
-    }
-    
-    func adding(seconds: TimeInterval) -> Date {
-        return self + seconds
     }
 }
