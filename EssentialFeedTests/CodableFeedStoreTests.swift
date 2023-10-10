@@ -32,7 +32,7 @@ final class CodableFeedStoreTests: XCTestCase {
         wait(for: [exp], timeout: 1)
     }
     
-    func test_retrieve_deliversEmptyOnEmptyCache() {
+    func test_retrieve_deliversDataOnNonEmptyCache() {
         let sut = CoadableFeedStore()
         let exp = expectation(description: "retrieve value expectation")
         
