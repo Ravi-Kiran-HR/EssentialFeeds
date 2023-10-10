@@ -32,18 +32,20 @@ final class CodableFeedStoreTests: XCTestCase {
         wait(for: [exp], timeout: 1)
     }
     
-    func test_retrieve_deliversDataOnNonEmptyCache() {
+    func test_retrieve_hasNoSideEffectsOnEmptyCache() {
         let sut = CoadableFeedStore()
         let exp = expectation(description: "retrieve value expectation")
         
-        sut.retrieve { result in
-            switch result {
-            case .empty:
-                break
-            default:
-                XCTFail("expected empty but got a \(result) instead")
+        sut.retrieve { firstResult in
+            sut.retrieve { secResult in
+                switch (firstResult, secResult) {
+                case (.empty, .empty):
+                    break
+                default:
+                    XCTFail("expected empty but got a \(firstResult) and \(secResult) instead")
+                }
+                exp.fulfill()
             }
-            exp.fulfill()
         }
         wait(for: [exp], timeout: 1)
     }
