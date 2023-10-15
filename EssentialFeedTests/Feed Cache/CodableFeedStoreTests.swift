@@ -65,9 +65,9 @@ final class CodableFeedStoreTests: XCTestCase {
     }
     
     override func tearDown() {
-        setupEmptyStoreState()
+        undoStoreSideEffects()
     }
-    
+        
     func test_retrieve_deliversEmptyOnEmptyCache() {
         let sut = makeSUT()
         let exp = expectation(description: "retrieve value expectation")
@@ -124,9 +124,16 @@ final class CodableFeedStoreTests: XCTestCase {
     }
     
     private func setupEmptyStoreState() {
+        deleteStoreArtifacts()
+    }
+    
+    private func undoStoreSideEffects() {
+        deleteStoreArtifacts()
+    }
+    
+    private func deleteStoreArtifacts() {
         do {
             try FileManager.default.removeItem(at: storeURL)
-            print("## removed item at path: \(storeURL)")
         }
         catch (let error) {
             print("## error: \(error)")
