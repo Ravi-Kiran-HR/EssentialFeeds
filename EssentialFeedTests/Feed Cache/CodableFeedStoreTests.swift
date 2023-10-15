@@ -11,25 +11,44 @@ import EssentialFeed
 class CodableFeedStore {
     
     private struct Cache: Codable {
-        let feed: [LocalFeedImage]
+        let feed: [CodableFeedImage]
         let timestamp: Date
+        
+        var localFeed: [LocalFeedImage] {
+            return feed.map { $0.local }
+        }
+    }
+    private struct CodableFeedImage: Codable {
+        private var id: UUID
+        private var description: String?
+        private var location: String?
+        private var url: URL
+        
+        var local: LocalFeedImage {
+            return LocalFeedImage(id: id, description: description, location: location, url: url)
+        }
+        
+        init( _ local: LocalFeedImage) {
+            self.id = local.id
+            self.description = local.description
+            self.location = local.location
+            self.url = local.url
+        }
     }
     
     private let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
     
     func retrieve(completion: @escaping FeedStore.RetrivalCompletion) {
-        guard let data = try? Data(Data(contentsOf: storeURL)) else {
+        guard let data = try? Data(contentsOf: storeURL) else {
            return completion(.empty)
         }
-        
-        let decoder = JSONDecoder()
-        let cache = try! decoder.decode(Cache.self, from: data)
-        completion(.found(feed: cache.feed, timestamp: cache.timestamp))
+        let cache = try! JSONDecoder().decode(Cache.self, from: data)
+        completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
     }
     
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping FeedStore.DeletionCompletion) {
-        let encoder = JSONEncoder()
-        let encoded = try! encoder.encode(Cache(feed: feed, timestamp: timestamp))
+        let cache = Cache(feed: feed.map(CodableFeedImage.init), timestamp: timestamp)
+        let encoded = try! JSONEncoder().encode(cache)
         try? encoded.write(to: storeURL)
         completion(nil)
     }
